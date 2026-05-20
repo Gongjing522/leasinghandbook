@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal Squared — Broker Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background: #0f0f0e;
+      font-family: 'DM Sans', sans-serif;
+      color: #e8e4dc;
+    }
+
+    .faq-wrap {
+      min-height: 100vh;
+      background: #0f0f0e;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Hero ── */
+    .faq-hero {
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      border-bottom: 0.5px solid #2a2a28;
+    }
+    .faq-hero .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 1rem;
+    }
+    .faq-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      color: #f0ece4;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .faq-hero p { font-size: 13px; color: #e8e4dc; }
+
+    /* ── Nav ── */
+    .faq-nav {
+      display: flex;
+      justify-content: center;
+      border-bottom: 0.5px solid #2a2a28;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .faq-nav button {
+      font-family: 'DM Sans', sans-serif;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #e8e4dc;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 1rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .faq-nav button.active { color: #c9a96e; border-bottom-color: #c9a96e; }
+    .faq-nav button:hover:not(.active) { color: #ffffff; }
+
+    /* ── Sections ── */
+    .faq-section { display: none; padding: 2rem 1.25rem; max-width: 700px; margin: 0 auto; width: 100%; }
+    .faq-section.active { display: block; }
+
+    /* ── FAQ ── */
+    .faq-item { border-bottom: 0.5px solid #1e1e1c; }
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 0;
+      cursor: pointer;
+      gap: 1rem;
+    }
+    .faq-q span { font-size: 14px; color: #d4cfc7; font-weight: 400; flex: 1; }
+    .faq-q .icon {
+      font-size: 16px;
+      color: #c9a96e;
+      min-width: 16px;
+      text-align: center;
+      transition: transform 0.2s;
+      user-select: none;
+    }
+    .faq-item.open .faq-q .icon { transform: rotate(45deg); }
+    .faq-a { display: none; padding: 0 0 1.1rem; font-size: 13px; color: #a09d97; line-height: 1.8; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── Fees ── */
+    .fee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .fee-grid { grid-template-columns: 1fr; } }
+    .fee-card {
+      background: #171715;
+      border: 0.5px solid #2a2a28;
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+    }
+    .fee-card .fc-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #c9a96e; margin-bottom: 0.4rem; }
+    .fee-card .fc-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; color: #f0ece4; line-height: 1.2; }
+    .fee-card .fc-note { font-size: 11px; color: #6a6866; margin-top: 0.3rem; }
+    .fee-divider { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #555350; margin: 1.5rem 0 0.75rem; }
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.55rem 0;
+      border-bottom: 0.5px solid #1a1a18;
+      font-size: 13px;
+      gap: 1rem;
+    }
+    .fee-row:last-child { border-bottom: none; }
+    .fee-row .fr-label { color: #a09d97; }
+    .fee-row .fr-val { color: #d4cfc7; text-align: right; }
+
+    /* ── Video ── */
+    .video-box {
+      background: #171715;
+      border: 0.5px solid #2a2a28;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .vid-label { display: block; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a96e; margin-bottom: 0.75rem; }
+    .vid-select {
+      width: 100%;
+      background: #0f0f0e;
+      border: 0.5px solid #2a2a28;
+      border-radius: 6px;
+      color: #e8e4dc;
+      padding: 0.6rem 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 1.25rem;
+      appearance: none;
+      cursor: pointer;
+    }
+    .vid-select:focus { border-color: #c9a96e; }
+    .video-input-row { display: flex; gap: 8px; }
+    .video-input-row input {
+      flex: 1;
+      background: #0f0f0e;
+      border: 0.5px solid #2a2a28;
+      border-radius: 6px;
+      color: #e8e4dc;
+      padding: 0.6rem 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      min-width: 0;
+    }
+    .video-input-row input:focus { border-color: #c9a96e; }
+    .video-input-row button {
+      background: #c9a96e;
+      color: #0f0f0e;
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1.1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .video-input-row button:hover { background: #d4b882; }
+    .video-result { margin-top: 1.25rem; display: none; background: #1a1a18; border: 0.5px solid #2a2a28; border-radius: 6px; padding: 1rem 1.25rem; }
+    .vr-unit { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #f0ece4; margin-bottom: 0.25rem; }
+    .vr-desc { font-size: 11px; color: #6a6866; margin-bottom: 0.75rem; }
+    .vr-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #c9a96e;
+      border: none;
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      color: #0f0f0e;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .vr-btn:hover { background: #d4b882; }
+    .multi-result { margin-top: 1.25rem; display: none; }
+    .multi-result .mr-label { font-size: 11px; color: #6a6866; margin-bottom: 0.5rem; }
+    .multi-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1a1a18;
+      border: 0.5px solid #2a2a28;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 8px;
+      gap: 0.75rem;
+    }
+    .multi-option .mo-name { font-size: 13px; color: #d4cfc7; flex: 1; }
+    .multi-option a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #c9a96e;
+      border-radius: 5px;
+      padding: 0.35rem 0.75rem;
+      color: #0f0f0e;
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .multi-option a:hover { background: #d4b882; }
+    .video-error { font-size: 12px; color: #c0614e; margin-top: 0.75rem; display: none; }
+    .video-note { font-size: 11px; color: #555450; margin-top: 1rem; line-height: 1.6; }
+
+    /* ── OP Policy ── */
+    .op-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .op-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: #f0ece4;
+    }
+    .op-updated {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      white-space: nowrap;
+    }
+    .op-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 540px) { .op-grid { grid-template-columns: 1fr; } }
+    .op-card {
+      background: #171715;
+      border: 0.5px solid #2a2a28;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .op-card-head {
+      padding: 0.75rem 1rem;
+      background: #1e1e1c;
+      border-bottom: 0.5px solid #2a2a28;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #c9a96e;
+    }
+    .op-tier {
+      padding: 0.7rem 1rem;
+      border-bottom: 0.5px solid #1a1a18;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .op-tier:last-child { border-bottom: none; }
+    .op-tier .ot-rate {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: #f0ece4;
+      line-height: 1.2;
+    }
+    .op-tier.highlight .ot-rate { color: #c9a96e; }
+    .op-tier .ot-cond {
+      font-size: 11px;
+      color: #6a6866;
+      line-height: 1.4;
+    }
+    .op-divider {
+      border: none;
+      border-top: 0.5px solid #2a2a28;
+      margin: 1.5rem 0;
+    }
+
+    /* ── Promo ── */
+    .promo-card {
+      background: #171715;
+      border: 0.5px solid #2a2a28;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .promo-card .pc-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 0.5rem;
+    }
+    .promo-card .pc-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 300;
+      color: #f0ece4;
+      margin-bottom: 0.6rem;
+    }
+    .promo-card .pc-body {
+      font-size: 13px;
+      color: #a09d97;
+      line-height: 1.8;
+    }
+    .promo-card .pc-body strong { color: #c9a96e; font-weight: 400; }
+    .promo-loading { font-size: 13px; color: #555450; padding: 2rem 0; text-align: center; }
+
+    /* ── Pet grid ── */
+    .pet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem; }
+    @media (max-width: 400px) { .pet-grid { grid-template-columns: 1fr; } }
+    .pet-card { background: #171715; border: 0.5px solid #2a2a28; border-radius: 6px; padding: 0.75rem 1rem; font-size: 12px; }
+    .pet-card .pc-title { color: #c9a96e; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem; }
+    .pet-card .pc-row { display: flex; justify-content: space-between; color: #a09d97; padding: 2px 0; }
+    .pet-card .pc-row span:last-child { color: #d4cfc7; }
+  </style>
+</head>
+<body>
+
+<div class="faq-wrap">
+  <div class="faq-hero">
+    <div class="eyebrow">Journal Squared</div>
+    <h1>Broker Guide</h1>
+    <p>Current promotions, OP policy, and leasing information for broker partners</p>
+  </div>
+  <nav class="faq-nav">
+    <button class="active" onclick="showTab('faq',this)">FAQ</button>
+    <button onclick="showTab('fees',this)">Fees &amp; Costs</button>
+    <button onclick="showTab('video',this)">Unit Video Tour</button>
+    <button onclick="showTab('promo',this)">Promos &amp; OP Policy</button>
+  </nav>
+
+  <div id="tab-faq" class="faq-section active"><div id="faq-list"></div></div>
+
+  <div id="tab-promo" class="faq-section">
+    <div id="promo-content"><div class="promo-loading">Loading promotions…</div></div>
+  </div>
+
+  <div id="tab-fees" class="faq-section">
+    <div class="fee-divider">Move-in costs</div>
+    <div class="fee-grid">
+      <div class="fee-card">
+        <div class="fc-label">Application Fee</div>
+        <div class="fc-amount">$50</div>
+        <div class="fc-note">Per home. Guarantor adds another $50.</div>
+      </div>
+      <div class="fee-card">
+        <div class="fc-label">Security Deposit</div>
+        <div class="fc-amount">$1,000–1.5 months rent</div>
+        <div class="fc-note">Studios / 1BR / 1BR+: $1,000 · 2 &amp; 3BR: $1,500. Max 1.5 months rent.</div>
+      </div>
+    </div>
+    <div class="fee-divider">Monthly fees</div>
+    <div class="fee-row"><span class="fr-label">Amenity Fee</span><span class="fr-val">$65 / mo</span></div>
+    <div class="fee-row"><span class="fr-label">Trash Fee</span><span class="fr-val">$12.50 / mo</span></div>
+    <div class="fee-divider">Optional add-ons</div>
+    <div class="fee-row"><span class="fr-label">Parking (reserved)</span><span class="fr-val">$300 / mo</span></div>
+    <div class="fee-row"><span class="fr-label">Pet — dog (monthly)</span><span class="fr-val">$50 / mo per dog</span></div>
+    <div class="fee-row"><span class="fr-label">Pet — dog (registration)</span><span class="fr-val">$250 one-time per dog</span></div>
+    <div class="fee-row"><span class="fr-label">Pet — cat (monthly)</span><span class="fr-val">$25 / mo per cat</span></div>
+    <div class="fee-row"><span class="fr-label">Pet — cat (registration)</span><span class="fr-val">$150 one-time per cat</span></div>
+    <p style="font-size:11px;color:#555450;margin-top:1.5rem;line-height:1.6;">Security deposit and first full month's rent are due within 3 days of lease signing. Residents are responsible for their own electricity and internet/WiFi. Landlord pays for water &amp; sewer.</p>
+  </div>
+
+  <div id="tab-video" class="faq-section">
+    <div class="video-box">
+      <span class="vid-label">Select your building</span>
+      <select class="vid-select" id="building-select" onchange="resetResult()">
+        <option value="" disabled selected>Choose a building...</option>
+        <option value="J1">Journal Squared 1</option>
+        <option value="J2">Journal Squared 2</option>
+        <option value="J3">Journal Squared 3</option>
+      </select>
+      <span class="vid-label">Enter your apartment number</span>
+      <div class="video-input-row">
+        <input type="text" id="apt-input" placeholder="e.g. 1201 or PH4" maxlength="10" />
+        <button onclick="genLink()">Find Video</button>
+      </div>
+      <div class="video-error" id="vid-error"></div>
+      <div class="video-result" id="vid-result">
+        <div class="vr-unit" id="vr-unit"></div>
+        <div class="vr-desc" id="vr-desc"></div>
+        <a class="vr-btn" id="vr-link" href="#" target="_blank">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Watch Video Tour
+        </a>
+      </div>
+      <div class="multi-result" id="multi-result">
+        <div class="mr-label">Multiple videos found for this unit — select one:</div>
+        <div id="multi-list"></div>
+      </div>
+      <p class="video-note">Enter your apartment number and we'll find the video walkthrough for your unit. For penthouse units, type PH followed by your unit number (e.g. PH4).</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const J1_VIDEOS = [
+  { stack:"01", floorMin:9,  floorMax:18, label:"Studio West",                    url:"https://drive.google.com/file/d/13rKobWNJEzKr0p8kdRx4nRgRdOgOYbos/view" },
+  { stack:"16", floorMin:9,  floorMax:18, label:"Studio South",                   url:"https://drive.google.com/file/d/1ORG7lLUWLmZ2XNKeNP570drFSkQwQWgCT/view" },
+  { stack:"01", floorMin:30, floorMax:99, label:"1 BR West (PH)",                 url:"https://drive.google.com/file/d/1lSwOTU3cyowY_z-8PLLG-X07o36pqcF6/view" },
+  { stack:"02", floorMin:9,  floorMax:18, label:"1 BR Northwest",                 url:"https://drive.google.com/file/d/1pLrNm83A_n8_sqiRiOgJyLICVCpHA6yl/view" },
+  { stack:"02", floorMin:30, floorMax:99, label:"1 BR Northwest (PH)",            url:"https://drive.google.com/file/d/102oxxmS89NliroEjL2K8rD7ybHOj9S-f/view" },
+  { stack:"03", floorMin:9,  floorMax:18, label:"(Resident Video)",               url:"https://drive.google.com/file/d/161IJK-WOmVc5SEwxZFn7XfiVpAbBvkxd/view" },
+  { stack:"03", floorMin:30, floorMax:99, label:"1BR North (PH)",                 url:"https://drive.google.com/file/d/17c3ePBFKDl-JmQTC3ip0z_70fXc_cK_9/view" },
+  { stack:"04", floorMin:19, floorMax:29, label:"Studio North",                   url:"https://drive.google.com/file/d/14jgWVkmy-EfkHNBW5aBiogU9ZYOEyRhz/view" },
+  { stack:"04", floorMin:19, floorMax:29, label:"Studio North (alt)",             url:"https://drive.google.com/file/d/1h5xuAYqInkpYNsnk5d1K-PqDfOKE2CZN/view" },
+  { stack:"04", floorMin:39, floorMax:99, label:"1 BR North (PH)",                url:"https://drive.google.com/file/d/1sYZ64dxFCi8-QpFvWy9grdPiqAuQPB1I/view" },
+  { stack:"05", floorMin:9,  floorMax:18, label:"Studio North",                   url:"https://drive.google.com/file/d/1IopBuR-3sSx6N5DPaEQHYWaIwsIOvgY-/view" },
+  { stack:"05", floorMin:19, floorMax:29, label:"3 BR North",                     url:"https://drive.google.com/file/d/1CS8FBUNqvcmWXETaxWiPIq67lqN6UcdG/view" },
+  { stack:"05", floorMin:19, floorMax:29, label:"3 BR Northeast (alt)",           url:"https://drive.google.com/file/d/16PSnGBl8CeG3lTn5kQa8xpSqWKyvDrXL/view" },
+  { stack:"05", floorMin:30, floorMax:99, label:"1 BR Northeast (PH)",            url:"https://drive.google.com/file/d/10iDFCr0jfJbXUjc8j7PJ12leqqikxXyN/view" },
+  { stack:"06", floorMin:9,  floorMax:18, label:"#1106 - Gene's version",         url:"https://drive.google.com/file/d/1bcvra9wjA3MV4mQLcJF3DS7tFXHHjXgE/view" },
+  { stack:"06", floorMin:9,  floorMax:18, label:"#1106",                          url:"https://drive.google.com/file/d/19FlRwmD0JFTvSRGCvr6EOdwvqpzRCn0K/view" },
+  { stack:"06", floorMin:21, floorMax:28, label:"1 BR East",                      url:"https://drive.google.com/file/d/1D0512P6MPzOb3t5xpkJllz6tmLMNeMOM/view" },
+  { stack:"06", floorMin:31, floorMax:99, label:"1 BR East (upper/PH)",           url:"https://drive.google.com/file/d/1pIlQdSyZRPpIALutGST8THlH1tAXUQ7f/view" },
+  { stack:"07", floorMin:9,  floorMax:18, label:"Studio North",                   url:"https://drive.google.com/file/d/1pQOc4k0Js9qAN3nIYxw8uEFS8ClPnIRB/view" },
+  { stack:"07", floorMin:19, floorMax:29, label:"Studio East",                    url:"https://drive.google.com/file/d/1pOLByhoasUFnjh7_c3zXvv7JuMAL4CkC/view" },
+  { stack:"07", floorMin:30, floorMax:99, label:"2 BR Southeast (PH)",            url:"https://drive.google.com/file/d/15uJeyLOQ52oKyTxRcDgmPtVtZNyQgqPZ/view" },
+  { stack:"08", floorMin:9,  floorMax:18, label:"2 BR Northeast",                 url:"https://drive.google.com/file/d/1x257ckEtjFPZvQ_m1dzSZ8VmDjdMn5pw/view" },
+  { stack:"08", floorMin:19, floorMax:29, label:"1 BR Southeast",                 url:"https://drive.google.com/file/d/1AUrED_2aOg_23OeIeNZ0UbYeSCuSZJrA/view" },
+  { stack:"08", floorMin:30, floorMax:99, label:"1 BR South + PH06",              url:"https://drive.google.com/file/d/1uENKAZUP-GoC_MFyeNR_OI7J2qzlB-kB/view" },
+  { stack:"09", floorMin:9,  floorMax:17, label:"1 BR East",                      url:"https://drive.google.com/file/d/17zsIPx-1PH7x-C_1tgUAYsWERWw7ELbY/view" },
+  { stack:"09", floorMin:39, floorMax:99, label:"1 BR South + PH07",              url:"https://drive.google.com/file/d/17r7TUL_WXGwPd9gRydBJ8Xp0yWz_QAVs/view" },
+  { stack:"10", floorMin:19, floorMax:29, label:"1 BR South",                     url:"https://drive.google.com/file/d/1Xbv_Z19VKvZ_XUstZswrWQVnVtAJxHoW/view" },
+  { stack:"10", floorMin:30, floorMax:99, label:"2 BR Southwest + PH08",          url:"https://drive.google.com/file/d/1YfYqYlOAMjf_RncTzuQxXWUo4fPPWSOt/view" },
+  { stack:"11", floorMin:9,  floorMax:18, label:"Studio South",                   url:"https://drive.google.com/file/d/1NKhJzYxOTpxE__V7TksSj44xMHeF2Xbk/view" },
+  { stack:"11", floorMin:30, floorMax:99, label:"Studio West + PH09",             url:"https://drive.google.com/file/d/1tzm4uP8OD2uqEsTvDV28z_eRxLQOU0Bm/view" },
+  { stack:"12", floorMin:19, floorMax:29, label:"1 BR West",                      url:"https://drive.google.com/file/d/1YvylnO9Pq9bUIyejtWUMutO21hersfRf/view" },
+  { stack:"13", floorMin:9,  floorMax:18, label:"Studio South",                   url:"https://drive.google.com/file/d/1GFFhqf4qRwH2BoHO6DWLLmpw5sRUN-FA/view" },
+  { stack:"15", floorMin:9,  floorMax:18, label:"",                               url:"https://drive.google.com/file/d/1bj2o3a6cPM3Q1r-ByjvvPXXzKpeAsriX/view" },
+];
+
+const J2_VIDEOS = [
+  // Stack 01
+  { stack:"01", floorMin:10, floorMax:17, label:"1 BR West",                        url:"https://drive.google.com/file/d/1eETowUR3EShET1b2e5_vmsJFEsDaAC-o/view" },
+  { stack:"01", floorMin:19, floorMax:27, label:"1 BR West",                        url:"https://drive.google.com/file/d/163xaznW4JX3o5ptKxYceBgva9F0ntSQX/view" },
+  { stack:"01", floorMin:30, floorMax:65, label:"1 BR West",                        url:"https://drive.google.com/file/d/1EE3JKAc-VvIRBDqWxZ-CuJU-ahehfqHP/view" },
+  { stack:"01", floorMin:30, floorMax:65, label:"1 BR West (alt)",                  url:"https://drive.google.com/file/d/1bvt29taQi5CR1RgvGdkTr12AXtTIm493/view" },
+  // Stack 02
+  { stack:"02", floorMin:10, floorMax:17, label:"1 BR Northwest",                   url:"https://drive.google.com/file/d/1-MfiWnHatuJuYqhH5JISobzyWmT1xCoB/view" },
+  { stack:"02", floorMin:10, floorMax:17, label:"1 BR Northwest (alt)",             url:"https://drive.google.com/file/d/15t5bgrXGAiCfo12oBGMlmSQ9kEgsW84V/view" },
+  { stack:"02", floorMin:19, floorMax:27, label:"1 BR Northwest",                   url:"https://drive.google.com/file/d/15MigySTMMJEGtHwcooS_6tGSfFQLn_rX/view" },
+  { stack:"02", floorMin:30, floorMax:65, label:"2 BR Northwest",                   url:"https://drive.google.com/file/d/1cXeNxlt-lnD6-5Fy1U4tIh4Tbp9sEPY8/view" },
+  // Stack 03
+  { stack:"03", floorMin:10, floorMax:17, label:"1 BR North",                       url:"https://drive.google.com/file/d/1GKGdZULEa3HB6B09CJjxa7_jVqQcwF2d/view" },
+  { stack:"03", floorMin:19, floorMax:27, label:"1 BR North",                       url:"https://drive.google.com/file/d/1aTRtER1U9Ka91NkcL5ZnA11hWtwkOIbd/view" },
+  { stack:"03", floorMin:30, floorMax:65, label:"1 BR North",                       url:"https://drive.google.com/file/d/1b0xM8MSdieY71fXKno0DQ_Z1HT2M6ZU3/view" },
+  // Stack 04
+  { stack:"04", floorMin:10, floorMax:18, label:"Studio North",                     url:"https://drive.google.com/file/d/1qxQwEAuiwHPBxh_glf8-t0JGroSe2bzB/view" },
+  { stack:"04", floorMin:19, floorMax:28, label:"Studio North",                     url:"https://drive.google.com/file/d/1ncl7HODtARkZM3ggwcHkfIeD8LQPyQy1/view" },
+  { stack:"04", floorMin:19, floorMax:28, label:"Studio North (alt)",               url:"https://drive.google.com/file/d/115OXsZcXG30wm-LbKB4-hJj0Djxa-iuR/view" },
+  { stack:"04", floorMin:30, floorMax:65, label:"2 BR NorthEast",                   url:"https://drive.google.com/file/d/1m8UXAfIfLsXhZE6S3Ti-IFQUyhYzxrCs/view" },
+  // Stack 05
+  { stack:"05", floorMin:10, floorMax:17, label:"Studio North",                     url:"https://drive.google.com/file/d/115QOVHj-gGvovoxSskTjs6FeQ3u9wg9y/view" },
+  { stack:"05", floorMin:19, floorMax:28, label:"Studio North",                     url:"https://drive.google.com/file/d/1RPIqo9wW8NFKMHwTOh6jt-4LdK-6I7Cs/view" },
+  { stack:"05", floorMin:24, floorMax:24, label:"Studio North — Model Unit",        url:"https://drive.google.com/file/d/1Rls6GBpYtrswiZmaR67QcwalATJEvUeD/view" },
+  { stack:"05", floorMin:30, floorMax:65, label:"1 BR East",                        url:"https://drive.google.com/file/d/1g0gWDXfo86J51Jr5yK8aH3KXVtUMCytb/view" },
+  // Stack 06
+  { stack:"06", floorMin:10, floorMax:18, label:"2 BR Northeast",                   url:"https://drive.google.com/file/d/13UrPcniIrEwG08Lri4u3IKTKnxpCryUQ/view" },
+  { stack:"06", floorMin:20, floorMax:28, label:"2 BR NorthEast",                   url:"https://drive.google.com/file/d/14RkzkhFNdhe_C-vJagrMBiNQsqba6yEw/view" },
+  { stack:"06", floorMin:29, floorMax:65, label:"1 BR East",                        url:"https://drive.google.com/file/d/1r99Uj0nXULr_CPeQVOwhdVN7q47hGEAt/view" },
+  // Stack 07
+  { stack:"07", floorMin:10, floorMax:18, label:"1 BR East NYC",                    url:"https://drive.google.com/file/d/1fYXApcqhtwZCHEmOnxt7gVLefJ3espUp/view" },
+  { stack:"07", floorMin:20, floorMax:28, label:"1 BR East NYC",                    url:"https://drive.google.com/file/d/1Y4_t8uvneLJKztdZ-yk5-fzJs_Ffp2o4/view" },
+  { stack:"07", floorMin:30, floorMax:65, label:"1 BR SouthEast",                   url:"https://drive.google.com/file/d/1M-pUCsOKs2Vt6HyXRyhh31pt3vuF0L8j/view" },
+  // Stack 08
+  { stack:"08", floorMin:10, floorMax:18, label:"1 BR East",                        url:"https://drive.google.com/file/d/1k5y2QCczwmnGasLmwuHWNmvWl9D_rY5b/view" },
+  { stack:"08", floorMin:20, floorMax:28, label:"1 BR East NYC",                    url:"https://drive.google.com/file/d/1be8BwV_vV6HpdwwwPkzM9jRaGKbgNBlp/view" },
+  { stack:"08", floorMin:30, floorMax:65, label:"1 BR South",                       url:"https://drive.google.com/file/d/1ItByagLDI5TL1llJRy0JC1pEuY6CLYgx/view" },
+  // Stack 09
+  { stack:"09", floorMin:10, floorMax:28, label:"3 BR Southeast",                   url:"https://drive.google.com/file/d/1pry7zK3gtPLlvnDMe6q9DnIgX2aXd-fP/view" },
+  { stack:"09", floorMin:30, floorMax:65, label:"Studio South",                     url:"https://drive.google.com/file/d/1ajrTrCL2nAhyhLntt6MRiNfBixVQ4AeN/view" },
+  // Stack 10
+  { stack:"10", floorMin:10, floorMax:17, label:"1 BR South",                       url:"https://drive.google.com/file/d/1CfqMKAZloiCoPY40tXzNzWRAd4RwoaEk/view" },
+  { stack:"10", floorMin:11, floorMax:18, label:"1 BR South (alt)",                 url:"https://drive.google.com/file/d/10nKEEV9IcKjS_DPugL957N896D6N3oOk/view" },
+  { stack:"10", floorMin:19, floorMax:28, label:"Studio South",                     url:"https://drive.google.com/file/d/1u9irZ8CZJZ5p_D1iBpaMf7Hob5IH11PM/view" },
+  { stack:"10", floorMin:30, floorMax:65, label:"2 BR Southwest",                   url:"https://drive.google.com/file/d/1nnikQ6SU8iRFS0hyAhxj31WoGKH8xom9/view" },
+  // Stack 11
+  { stack:"11", floorMin:10, floorMax:18, label:"Studio South",                     url:"https://drive.google.com/file/d/1H15U7ijYVDPZe0ALJU7t9UxGg0DYYpsK/view" },
+  { stack:"11", floorMin:20, floorMax:28, label:"Studio South",                     url:"https://drive.google.com/file/d/15FKfFC9ibaoS1Mgz77KdssENtlSi6Fey/view" },
+  { stack:"11", floorMin:20, floorMax:28, label:"Studio South (alt)",               url:"https://drive.google.com/file/d/15X3f9yWKJ_XTyAJeM5HRhzqetHQOnSba/view" },
+  { stack:"11", floorMin:30, floorMax:65, label:"1 BR West",                        url:"https://drive.google.com/file/d/1iGCG-EQCJdYl4nY1OKaejgK2bxJ4Rcel/view" },
+  // Stack 12
+  { stack:"12", floorMin:10, floorMax:17, label:"Studio South",                     url:"https://drive.google.com/file/d/1fSgMIAUMaEe6fWIWL3vGOqd2jzgoq49d/view" },
+  { stack:"12", floorMin:20, floorMax:28, label:"1 BR South",                       url:"https://drive.google.com/file/d/1lcLid8XfRIyPiPr9QuZwNC64ST9kze97/view" },
+  // Stack 13
+  { stack:"13", floorMin:10, floorMax:18, label:"Studio South",                     url:"https://drive.google.com/file/d/14OWEIonD2Cx5tUfLscpe2UOHCxtWfoIC/view" },
+  { stack:"13", floorMin:20, floorMax:28, label:"2 BR Southwest",                   url:"https://drive.google.com/file/d/17X8xmocR8wn_d4cs6OYy4zm4vyF-IERv/view" },
+  // Stack 14
+  { stack:"14", floorMin:10, floorMax:17, label:"1 BR Southwest",                   url:"https://drive.google.com/file/d/1mOuLooPbFbiHXgaxdXAd21-vbM3xkR24/view" },
+  { stack:"14", floorMin:24, floorMax:24, label:"1 BR Plus West — Island Kitchen Model", url:"https://drive.google.com/file/d/1XC9z2dIazjGFzeAzykH3YG3n5NF3NoET/view" },
+  // Stack 15
+  { stack:"15", floorMin:10, floorMax:18, label:"Studio West",                      url:"https://drive.google.com/file/d/1h4ziVeZQuH1H4OJExOOz4ZNGJxI8xZRJ/view" },
+  // Stack 16
+  { stack:"16", floorMin:10, floorMax:18, label:"Studio West",                      url:"https://drive.google.com/file/d/1KsqX_sumAztfeJOZ11WZ8dFl_uTHNGfr/view" },
+  // Stack 17
+  { stack:"17", floorMin:10, floorMax:17, label:"1 BR West",                        url:"https://drive.google.com/file/d/1CpY9yqfDtk_p5GZ1_NEIHxn0fsdjGpg3/view" },
+  // Stack 02 high-rise MD version
+  { stack:"02", floorMin:30, floorMax:65, label:"2 BR Northwest (MD)",              url:"https://drive.google.com/file/d/1Z71O4D1KqbbGePethHOCHhdC8dLJ_CYD/view" },
+];
+
+const J3_VIDEOS = [
+  // Stack 01 — floors 9–15
+  { stack:"01", floorMin:9,  floorMax:15, label:"1BR",                              url:"https://my.matterport.com/show/?m=hKd5BSf3zC9" },
+  // Stack 02 — floors 9–15
+  { stack:"02", floorMin:9,  floorMax:15, label:"2BR",                              url:"https://my.matterport.com/show/?m=5eEkT98o8UD" },
+  // Stack 03 — floors 9–15
+  { stack:"03", floorMin:9,  floorMax:15, label:"Studio",                           url:"https://my.matterport.com/show/?m=UoP3uH7S1Fh" },
+  // Stack 04 — floors 9–15
+  { stack:"04", floorMin:9,  floorMax:15, label:"Studio",                           url:"https://my.matterport.com/show/?m=ScQydd6KzYv" },
+  // Stack 05 — floors 9–15
+  { stack:"05", floorMin:9,  floorMax:15, label:"Studio",                           url:"https://my.matterport.com/show/?m=7aGnFroEepy" },
+  // Stack 06 — floors 9–15
+  { stack:"06", floorMin:9,  floorMax:15, label:"3BR",                              url:"https://my.matterport.com/show/?m=ceT2khbgZsK" },
+  // Stack 07 — floors 9–15
+  { stack:"07", floorMin:9,  floorMax:15, label:"Studio",                           url:"https://my.matterport.com/show/?m=9N2aMYu6MBm" },
+  // Stack 08 — floors 9–15
+  { stack:"08", floorMin:9,  floorMax:15, label:"Studio",                           url:"https://my.matterport.com/show/?m=rrh7TL4qxSW" },
+  // Stack 09 — floors 9–15
+  { stack:"09", floorMin:9,  floorMax:15, label:"Studio",                           url:"https://my.matterport.com/show/?m=jDTSmr5t7xh" },
+  // Stack 10 — floors 9–15
+  { stack:"10", floorMin:9,  floorMax:15, label:"2BR",                              url:"https://my.matterport.com/show/?m=G4y27zAX6TG" },
+  // Stack 11 — floors 9–15
+  { stack:"11", floorMin:9,  floorMax:15, label:"2BR",                              url:"https://my.matterport.com/show/?m=4UuoTQcDmBY" },
+  // Stack 12 — floors 9–15
+  { stack:"12", floorMin:9,  floorMax:15, label:"1BR",                              url:"https://my.matterport.com/show/?m=Vo9qQEX3c6Q" },
+  // Stack 13 — floors 9–15
+  { stack:"13", floorMin:9,  floorMax:15, label:"3BR",                              url:"https://my.matterport.com/show/?m=wjyuxAaHBDm" },
+  // Stack 14 — floors 9–15
+  { stack:"14", floorMin:9,  floorMax:15, label:"1BR",                              url:"https://my.matterport.com/show/?m=PcDTAdL3D79" },
+  // Stack 15 — floors 9–15
+  { stack:"15", floorMin:9,  floorMax:15, label:"1BR Micro",                        url:"https://my.matterport.com/show/?m=2q8c4dzrktN" },
+
+  // Stack 01 — floors 16–24
+  { stack:"01", floorMin:16, floorMax:24, label:"1BR",                              url:"https://my.matterport.com/show/?m=4FWehuPiDZb" },
+  // Stack 02 — floors 16–24
+  { stack:"02", floorMin:16, floorMax:24, label:"2BR",                              url:"https://my.matterport.com/show/?m=678sb4DAE2K" },
+  { stack:"02", floorMin:16, floorMax:16, label:"2BR — Terrace",                    url:"https://my.matterport.com/show/?m=ceKEDEGQgcK" },
+  // Stack 03 — floors 16–24
+  { stack:"03", floorMin:16, floorMax:24, label:"1BR",                              url:"https://my.matterport.com/show/?m=yQ3hzmsqNeg" },
+  { stack:"03", floorMin:16, floorMax:16, label:"1BR — Terrace",                    url:"https://my.matterport.com/show/?m=sUv5mQr8Lh9" },
+  // Stack 04 — floors 16–24
+  { stack:"04", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=zN8oZBdH569" },
+  // Stack 05 — floors 16–24
+  { stack:"05", floorMin:16, floorMax:24, label:"2BR",                              url:"https://my.matterport.com/show/?m=81V7J7DtBHg" },
+  // Stack 06 — floors 16–24
+  { stack:"06", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=BnmwZo6ZodG" },
+  // Stack 07 — floors 16–24
+  { stack:"07", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=VsQPVYURG5r" },
+  { stack:"07", floorMin:16, floorMax:16, label:"Studio — Terrace",                 url:"https://my.matterport.com/show/?m=a2RRQFm13aR" },
+  // Stack 08 — floors 16–24
+  { stack:"08", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=pH4WVadfWoi" },
+  { stack:"08", floorMin:16, floorMax:16, label:"Studio — Terrace",                 url:"https://my.matterport.com/show/?m=pUvo3BXgkJ2" },
+  // Stack 09 — floors 16–24
+  { stack:"09", floorMin:16, floorMax:24, label:"2BR",                              url:"https://my.matterport.com/show/?m=YPuJFX9ovCg" },
+  { stack:"09", floorMin:16, floorMax:16, label:"2BR — Terrace",                    url:"https://my.matterport.com/show/?m=LfUpT1P75cc" },
+  // Stack 10 — floors 16–24
+  { stack:"10", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=ESy51ukx2Bm" },
+  // Stack 11 — floors 16–24
+  { stack:"11", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=vPkRzXPDdcW" },
+  // Stack 12 — floors 16–24
+  { stack:"12", floorMin:16, floorMax:24, label:"2BR",                              url:"https://my.matterport.com/show/?m=FCQcJNxGs4K" },
+  { stack:"12", floorMin:16, floorMax:16, label:"2BR — Terrace",                    url:"https://my.matterport.com/show/?m=yxK3mEdZwGN" },
+  // Stack 13 — floors 16–24
+  { stack:"13", floorMin:16, floorMax:24, label:"Studio",                           url:"https://my.matterport.com/show/?m=9MyPtHqEMoS" },
+  // Stack 14 — floors 16–24
+  { stack:"14", floorMin:16, floorMax:24, label:"1BR",                              url:"https://my.matterport.com/show/?m=3sNafLdxXqy" },
+
+  // Stack 10 — floors 25–58
+  { stack:"10", floorMin:25, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=N2DoPm5vBwR" },
+  { stack:"10", floorMin:25, floorMax:25, label:"1BR — Terrace",                    url:"https://my.matterport.com/show/?m=ZQGpR5zLTaT" },
+  // Stack 11 — floors 25–31
+  { stack:"11", floorMin:25, floorMax:31, label:"1BR",                              url:"https://my.matterport.com/show/?m=GtZLrCBwFkD" },
+  // Stack 01 — floors 25–31
+  { stack:"01", floorMin:25, floorMax:31, label:"Studio",                           url:"https://my.matterport.com/show/?m=Nbpit5i1V52" },
+  { stack:"01", floorMin:25, floorMax:31, label:"Studio — Model",                   url:"https://my.matterport.com/show/?m=RB7RDdYZWG9" },
+  // Stack 01 — floors 32–58
+  { stack:"01", floorMin:32, floorMax:58, label:"Studio",                           url:"https://my.matterport.com/show/?m=ptCcneX1B4G" },
+  // Stack 02 — floors 25–58
+  { stack:"02", floorMin:25, floorMax:58, label:"2BR",                              url:"https://my.matterport.com/show/?m=9Vub1ZXV7rX" },
+  { stack:"02", floorMin:25, floorMax:58, label:"2BR — Model",                      url:"https://my.matterport.com/show/?m=gEQSzknRTnD" },
+  // Stack 03 — floors 25–31
+  { stack:"03", floorMin:25, floorMax:31, label:"1BR",                              url:"https://my.matterport.com/show/?m=ayrBBRtoTBN" },
+  // Stack 03 — floors 32–58
+  { stack:"03", floorMin:32, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=hbViP4o4ZVD" },
+  // Stack 04 — floors 25–58
+  { stack:"04", floorMin:25, floorMax:58, label:"2BR",                              url:"https://my.matterport.com/show/?m=SR4RLssNtD6" },
+  { stack:"04", floorMin:25, floorMax:25, label:"2BR — Terrace",                    url:"https://my.matterport.com/show/?m=xPjxe3RK3a3" },
+  // Stack 05 — floors 25–58
+  { stack:"05", floorMin:25, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=vbLFUXzcqXR" },
+  { stack:"05", floorMin:25, floorMax:25, label:"1BR — Terrace",                    url:"https://my.matterport.com/show/?m=gtse9NCzBnE" },
+  // Stack 06 — floors 25–58
+  { stack:"06", floorMin:25, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=fkWCYYJAyfz" },
+  { stack:"06", floorMin:25, floorMax:58, label:"1BR — Model",                      url:"https://my.matterport.com/show/?m=TWPvbPKsLXR" },
+  // Stack 07 — floors 25–58
+  { stack:"07", floorMin:25, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=iyEC4EoEiVE" },
+  // Stack 08 — floors 25–58
+  { stack:"08", floorMin:25, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=uCqDA28rxBD" },
+  // Stack 09 — floors 25–58
+  { stack:"09", floorMin:25, floorMax:58, label:"1BR",                              url:"https://my.matterport.com/show/?m=szvFTFzPwer" },
+  { stack:"09", floorMin:25, floorMax:25, label:"1BR — Terrace",                    url:"https://my.matterport.com/show/?m=1jxREKQTsTv" },
+];
+
+function parseApt(raw) {
+  raw = raw.trim().toUpperCase();
+  let isPH = false, stack = null, floor = null;
+  if (raw.startsWith('PH')) {
+    isPH = true;
+    const num = raw.replace('PH','').replace(/^0+/,'');
+    stack = num.padStart(2,'0');
+    floor = 99;
+  } else {
+    const digits = raw.replace(/^0+/,'');
+    if (digits.length === 3) {
+      floor = parseInt(digits[0]);
+      stack = digits.slice(1).padStart(2,'0');
+    } else if (digits.length === 4) {
+      floor = parseInt(digits.slice(0,2));
+      stack = digits.slice(2).padStart(2,'0');
+    } else return null;
+  }
+  return { isPH, stack, floor };
+}
+
+function findVideos(building, parsed) {
+  const db = building === 'J1' ? J1_VIDEOS : building === 'J2' ? J2_VIDEOS : J3_VIDEOS;
+  return db.filter(v => v.stack === parsed.stack && parsed.floor >= v.floorMin && parsed.floor <= v.floorMax);
+}
+
+function resetResult() {
+  document.getElementById('vid-result').style.display = 'none';
+  document.getElementById('multi-result').style.display = 'none';
+  document.getElementById('vid-error').style.display = 'none';
+}
+
+function genLink() {
+  const building = document.getElementById('building-select').value;
+  const aptRaw = document.getElementById('apt-input').value;
+  const err = document.getElementById('vid-error');
+  resetResult();
+
+  if (!building) { err.textContent = 'Please select a building.'; err.style.display = 'block'; return; }
+
+  const parsed = parseApt(aptRaw);
+  if (!parsed) { err.textContent = 'Please enter a valid apartment number (e.g. 1201, 0912, PH4).'; err.style.display = 'block'; return; }
+
+  // Check if building videos are not yet loaded
+  const db = building === 'J1' ? J1_VIDEOS : building === 'J2' ? J2_VIDEOS : J3_VIDEOS;
+  if (db.length === 0) {
+    err.textContent = 'Video tours for ' + building.replace('J','Journal Squared ') + ' are coming soon. Please contact the leasing office.';
+    err.style.display = 'block';
+    return;
+  }
+
+  const matches = findVideos(building, parsed);
+  const unitLabel = aptRaw.toUpperCase().startsWith('PH') ? aptRaw.toUpperCase() : 'Unit ' + aptRaw;
+
+  if (matches.length === 0) {
+    err.textContent = 'No video found for this unit. Please contact the leasing office.';
+    err.style.display = 'block';
+  } else if (matches.length === 1) {
+    document.getElementById('vr-unit').textContent = building.replace('J','Journal Squared ') + ' — ' + unitLabel;
+    document.getElementById('vr-desc').textContent = matches[0].label;
+    document.getElementById('vr-link').href = matches[0].url;
+    document.getElementById('vid-result').style.display = 'block';
+  } else {
+    const list = document.getElementById('multi-list');
+    list.innerHTML = '';
+    matches.forEach(m => {
+      const row = document.createElement('div');
+      row.className = 'multi-option';
+      row.innerHTML = `<span class="mo-name">${m.label || unitLabel}</span><a href="${m.url}" target="_blank"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Watch</a>`;
+      list.appendChild(row);
+    });
+    document.getElementById('multi-result').style.display = 'block';
+  }
+}
+
+document.getElementById('apt-input').addEventListener('keydown', e => { if (e.key === 'Enter') genLink(); });
+
+const faqs = [
+  { q: "What are the lease term options?", a: `We offer lease terms between 10 and 24 months. Pricing will vary depending on the lease term you select. To see exact pricing for your preferred term, click the <strong style="color:#c9a96e;font-weight:400">"Apply Today"</strong> button on the unit's page on our website.` },
+  { q: "What are the other fees on top of rent?", a: `In addition to your base rent, the following fees apply:<br><br><strong style="color:#d4cfc7;font-weight:400">Monthly (mandatory):</strong><br>&bull; Amenity Fee: $65/mo<br>&bull; Trash Fee: $12.50/mo<br><br><strong style="color:#d4cfc7;font-weight:400">Monthly (optional):</strong><br>&bull; Parking: $300/mo (reserved spot)<br>&bull; Pet rent: $50/mo per dog, $25/mo per cat<br><br><strong style="color:#d4cfc7;font-weight:400">One-time fees:</strong><br>&bull; Security deposit: $1,000 up to 1.5 months rent subject to approved screening<br>&bull; Application fee: $50 per home ($50 additional for a guarantor)<br>&bull; Pet registration: $250 per dog, $150 per cat<br><br>Residents are responsible for their own electricity and internet/WiFi. Water &amp; sewer is covered by the landlord.` },
+  { q: "How do I apply for an apartment?", a: `Applications are completed online. You'll need proof of income (minimum 36x the monthly rent annually), a government-issued ID, and a completed application.<br><br>The application fee is <strong style="color:#c9a96e;font-weight:400">$50 per home</strong> — once paid, the apartment is held for you. You will have <strong style="color:#c9a96e;font-weight:400">3 days</strong> to upload all required documents. If you have a guarantor, an additional $50 application fee applies for them as well.` },
+  { q: "What is the pet policy?", a: `We welcome cats and dogs — up to 2 pets per home.<br><br><div class="pet-grid"><div class="pet-card"><div class="pc-title">Dogs</div><div class="pc-row"><span>Registration fee</span><span>$250 / dog</span></div><div class="pc-row"><span>Monthly pet rent</span><span>$50 / dog</span></div></div><div class="pet-card"><div class="pc-title">Cats</div><div class="pc-row"><span>Registration fee</span><span>$150 / cat</span></div><div class="pc-row"><span>Monthly pet rent</span><span>$25 / cat</span></div></div></div><br>Breed restrictions apply. The following breeds are not permitted: Pit Bull, Rottweiler, Doberman, and German Shepherd.` },
+  { q: "Is parking available?", a: "Yes, reserved covered parking is available for $300/month. Spaces are subject to availability at time of move-in." },
+  { q: "Can I sublet or list my unit on Airbnb?", a: "Subletting and short-term rentals (including Airbnb, VRBO, and similar platforms) are not permitted under the terms of your lease." },
+  { q: "Is the price shown on the website net or gross?", a: `The website displays the <strong style="color:#d4cfc7;font-weight:400">gross rent for a 24-month lease term</strong>. To view pricing for other lease terms, such as 12 or 14 months, visit the unit's page on our website and click the <strong style="color:#c9a96e;font-weight:400">"Apply Today"</strong> button.` },
+];
+const list = document.getElementById('faq-list');
+faqs.forEach((item, i) => {
+  const div = document.createElement('div');
+  div.className = 'faq-item';
+  div.innerHTML = `<div class="faq-q" onclick="toggle(${i})"><span>${item.q}</span><span class="icon">+</span></div><div class="faq-a">${item.a}</div>`;
+  list.appendChild(div);
+});
+
+function toggle(i) {
+  const items = document.querySelectorAll('.faq-item');
+  const el = items[i];
+  const wasOpen = el.classList.contains('open');
+  items.forEach(x => x.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+function showTab(tab, btn) {
+  document.querySelectorAll('.faq-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.faq-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Promo + OP loader (Broker) ──
+const FALLBACK_DATA = {
+  updated: "May 20, 2026",
+  promotions: {
+    headline: "1 Month Free — Journal Squared 3 Only",
+    body: "Receive one month free on any lease term of 14 months or longer."
+  },
+  op_policy: [
+    { building: "JSQ1", tiers: [
+      { rate: "1.0 Month OP", condition: "Move-in by 6/15/26", highlight: true },
+      { rate: "0.5 Month OP", condition: "Everything else", highlight: false }
+    ]},
+    { building: "JSQ2", tiers: [
+      { rate: "1.5 Month OP", condition: "All Studios — move-in by 6/30/26", highlight: true },
+      { rate: "1.0 Month OP", condition: "All units — move-in by 6/15/26", highlight: true },
+      { rate: "0.5 Month OP", condition: "Everything else", highlight: false }
+    ]},
+    { building: "JSQ3", tiers: [
+      { rate: "1.5 Month OP", condition: "All Studios — move-in by 6/30/26", highlight: true },
+      { rate: "1.0 Month OP", condition: "All other deals", highlight: false }
+    ]}
+  ]
+};
+
+function nextWednesday(dateStr) {
+  const d = new Date(dateStr);
+  if (isNaN(d)) return '';
+  const day = d.getDay();
+  const diff = (3 - day + 7) % 7 || 7;
+  d.setDate(d.getDate() + diff);
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+function renderBroker(data) {
+  const p = data.promotions;
+  const op = data.op_policy || [];
+  const updated = data.updated || '';
+  const changeDate = updated ? nextWednesday(updated) : '';
+
+  const opCards = op.map(b => `
+    <div class="op-card">
+      <div class="op-card-head">${b.building}</div>
+      ${b.tiers.map(t => `
+        <div class="op-tier${t.highlight ? ' highlight' : ''}">
+          <div class="ot-rate">${t.rate}</div>
+          <div class="ot-cond">${t.condition}</div>
+        </div>`).join('')}
+    </div>`).join('');
+
+  document.getElementById('promo-content').innerHTML = `
+    ${updated ? `<div class="op-updated" style="margin-bottom:1.25rem;">Updated ${updated}${changeDate ? ' · Subject to change ' + changeDate : ''}</div>` : ''}
+    <div class="op-section-title" style="margin-bottom:1rem;">OP Policy</div>
+    <div class="op-grid">${opCards}</div>
+    <hr class="op-divider">
+    <div class="promo-card">
+      <div class="pc-eyebrow">Current Promotion</div>
+      <div class="pc-headline">${p.headline}</div>
+      <div class="pc-body">${p.body}<br><br>Prices displayed on our website reflect the gross rent for a 24-month lease term. To view pricing for other lease terms, such as 12 or 14 months, visit the unit's page on our website and click Apply Today.</div>
+    </div>
+  `;
+}
+
+fetch('op.json')
+  .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+  .then(data => renderBroker(data))
+  .catch(() => renderBroker(FALLBACK_DATA));
+</script>
+</body>
+</html>
