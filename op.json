@@ -1,5 +1,5 @@
 {
-  "updated": "June 24, 2026",
+  "updated": "July 1, 2026",
   "promotions": {
     "headline": "1 Month Free — Journal Squared 3 Only",
     "body": "Receive one month free on any lease term of 13 months or longer.",
@@ -26,7 +26,6 @@
       "building": "JSQ3",
       "tiers": [
         { "rate": "1.0 Month OP", "condition": "All deals", "highlight": true },
-       //{ "rate": "1.0 Month OP", "condition": "All  deals", "highlight": false }
       ]
     }
   ]
