@@ -25,7 +25,7 @@
     {
       "building": "JSQ3",
       "tiers": [
-        { "rate": "1.0 Month OP", "condition": "All deals", "highlight": true },
+        { "rate": "1.0 Month OP", "condition": "All deals", "highlight": true }
       ]
     }
   ]
